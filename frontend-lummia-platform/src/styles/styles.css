@@ -1,0 +1,212 @@
+/* 1. Tailwind Foundation */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2. Global Theme Variables */
+@layer base {
+  /* NEON THEME (Default) */
+  :root, [data-theme="neon"] {
+    --rgb-bg: 10 9 13;
+    --rgb-card: 0 0 0;
+    --rgb-input: 255 255 255;
+    --rgb-text: 255 255 255;
+    --rgb-muted: 161 161 170;
+    --rgb-border: 217 70 239;
+    --rgb-accent: 217 70 239;
+    --blur-theme: 20px;
+    --shadow-main: 0 0 20px rgba(217, 70, 239, 0.15);
+    --icon-invert: 1;
+  }
+
+/* BLACK THEME */
+  /* Dark Theme */
+  [data-theme="black"] {
+    --rgb-app: 5, 5, 5;
+    --rgb-card: 9, 9, 11;
+    --rgb-line: 255, 255, 255;
+    --rgb-main: 244, 244, 245;
+    --rgb-muted: 161, 161, 170;
+    --rgb-accent: 255, 255, 255;
+    color-scheme: dark;
+    --rgb-bg: 14 14 18;
+    --rgb-input: 24 24 27;
+    --rgb-text: 244 244 245;
+    --rgb-border: 55 55 62;
+    --rgb-card: 22 22 28;
+    --blur-theme: 0px;
+    --shadow-main: 0 10px 30px rgba(0, 0, 0, 0.8);
+    --icon-invert: 1;
+    --nav-bg: rgba(9, 9, 11, 0.9);
+    --nav-border: rgba(255, 255, 255, 0.05);
+  }
+
+/* WHITE THEME */
+  [data-theme="white"] {
+    --rgb-bg: 248 250 252; /* Un blanco/hielo muy limpio (slate-50) */
+    --rgb-card: 255 255 255; /* Tarjetas en blanco puro para contrastar */
+    --rgb-input: 241 245 249;
+    --rgb-text: 15 23 42; /* Texto principal súper nítido */
+    --rgb-muted: 100 116 139;
+    --rgb-border: 226 232 240;
+    --rgb-accent: 147 51 234; 
+    --blur-theme: 0px;
+    --shadow-main: 0 10px 40px rgba(147, 51, 234, 0.06);
+    --icon-invert: 0;
+  }
+}
+
+/* 3. Reusable Components & Custom Classes */
+@layer components {
+  
+  /* --- Horizontal Scroll Containers --- */
+  .scroll-x-container,
+  .course-scroll-container {
+    scroll-snap-type: none;
+    scroll-behavior: auto !important; 
+    will-change: scroll-position;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Edge Fade Mask for scrollbars */
+  .scroll-mask,
+  .course-scroll-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 2%, black 8%, black 92%, rgba(0,0,0,0.2) 98%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 2%, black 8%, black 92%, rgba(0,0,0,0.2) 98%, transparent 100%);
+  }
+
+  /* Custom Webkit Scrollbar Styling */
+  .scroll-x-container::-webkit-scrollbar,
+  .course-scroll-container::-webkit-scrollbar { 
+    height: 4px; 
+  }
+  
+  .scroll-x-container::-webkit-scrollbar-track,
+  .course-scroll-container::-webkit-scrollbar-track { 
+    background: transparent; 
+    margin-inline: 40px; 
+  }
+  
+  .scroll-x-container::-webkit-scrollbar-thumb,
+  .course-scroll-container::-webkit-scrollbar-thumb { 
+    border-radius: 10px; 
+    background: rgba(255, 255, 255, 0.1); /* Default subtle color */
+  }
+
+  /* Specific Scrollbar Colors */
+  .python-scroll::-webkit-scrollbar-thumb, .scroll-thumb-blue::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); }
+  .html-scroll::-webkit-scrollbar-thumb, .scroll-thumb-fuchsia::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.3); }
+  .js-scroll::-webkit-scrollbar-thumb, .scroll-thumb-amber::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.3); }
+  .db-scroll::-webkit-scrollbar-thumb, .scroll-thumb-emerald::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); }
+/** AQUI **/
+  /* --- Authentication Panel Transitions (Login/Register) --- */
+  .auth-panel {
+    @apply absolute w-full h-full flex flex-col justify-center p-10 transition-all duration-700 ease-in-out;
+  }
+  
+  .auth-container.is-login .login-panel { transform: translateY(0); opacity: 1; }
+  .auth-container.is-login .register-panel { transform: translateY(100%); opacity: 0; pointer-events: none; }
+  
+  .auth-container.is-register .login-panel { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+  .auth-container.is-register .register-panel { transform: translateY(0); opacity: 1; }
+
+  /* --- Capybara Animations --- */
+  .animate-capybara-cruise {
+    /* Balanced speed (10s) and large width */
+    animation: capybaraCruise 10s linear infinite;
+    width: min(500px, 80vw) !important; 
+  }
+  
+  .animate-capybara-bob {
+    animation: capybaraBob 1.2s ease-in-out infinite alternate;
+  }
+
+  /* --- Falling Leaves Logic --- */
+  .leaf {
+    position: absolute;
+    top: -60px;
+    display: block;
+    opacity: 0;
+    /* Smooth, steady fall speed (6s) */
+    animation: leafFall 6s linear infinite;
+  }
+  
+  .leaf::before {
+    content: '';
+    display: block;
+    /* Increased default size */
+    width: var(--leaf-size, 30px);
+    height: var(--leaf-size, 30px);
+    border-radius: 2px 50% 50% 50%;
+    background: var(--leaf-color, rgb(var(--rgb-accent)));
+    box-shadow: inset -3px -3px 6px rgba(0,0,0,0.2);
+    transform: rotate(45deg);
+  }
+  
+  /* Leaf Color Variations */
+  .leaf-accent::before  { --leaf-color: rgb(var(--rgb-accent)); }
+  .leaf-fuchsia::before { --leaf-color: #d946ef; }
+  .leaf-purple::before  { --leaf-color: #a855f7; }
+  .leaf-blue::before    { --leaf-color: #3b82f6; }
+}
+
+/* 4. Global Animation Keyframes */
+@keyframes capybaraCruise {
+  0% { transform: translate(calc(100% + 100vw), -50%); }
+  50% { transform: translate(calc(-100% - 100vw), -50%); }
+  50.01% { transform: translate(calc(-100% - 100vw), -50%) rotateY(180deg); }
+  100% { transform: translate(calc(100% + 100vw), -50%) rotateY(180deg); }
+}
+
+@keyframes capybaraBob {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-8px); }
+}
+
+@keyframes leafFall {
+  0% { top: -60px; opacity: 0; transform: translateX(0) rotate(0deg); }
+  5% { opacity: 0.85; }
+  25% { transform: translateX(40px) rotate(90deg); }
+  50% { transform: translateX(-30px) rotate(180deg); }
+  75% { transform: translateX(50px) rotate(270deg); }
+  95% { opacity: 0.7; }
+  100% { top: 110vh; opacity: 0; transform: translateX(-20px) rotate(360deg); }
+  
+}
+
+@keyframes viewEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+#app-wrapper[data-current-theme="neon"] #ambient-glows {
+  opacity: 1; 
+}
+
+#app-wrapper[data-current-theme="black"] #ambient-glows {
+  opacity: 0; 
+}
+
+#app-wrapper[data-current-theme="white"] #ambient-glows {
+  opacity: 0; 
+}
+
+#app-wrapper[data-current-theme="neon"] #ambient-glows {
+  opacity: 1; 
+}
+
+#app-wrapper[data-current-theme="black"] #ambient-glows {
+  opacity: 0.15; 
+}
+
+#app-wrapper[data-current-theme="white"] #ambient-glows {
+  opacity: 0.08; /* Efecto holografico/pastel sutil sobre el fondo blanco */
+}
